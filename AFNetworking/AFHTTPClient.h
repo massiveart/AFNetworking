@@ -33,6 +33,7 @@ typedef enum {
     AFFormURLParameterEncoding,
     AFJSONParameterEncoding,
     AFPropertyListParameterEncoding,
+    AFXMLParameterEncoding,
 } AFHTTPClientParameterEncoding;
 
 /**

@@ -119,6 +119,19 @@ static NSString * AFPropertyListStringFromParameters(NSDictionary *parameters) {
     return propertyListString;
 }
 
+static NSString *AFXMLStringFromParameters(NSDictionary *parameters) {
+    NSString *xmlString = nil;
+    
+	NSString *pathForResource = [parameters objectForKey:@"resource"];
+	NSString *resourceType = [parameters objectForKey:@"type"];
+	NSData *xmlData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:pathForResource ofType:resourceType]];
+	if (xmlData) {
+		xmlString = [[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding];
+	}
+    MALog(@"xmlString is: %@", xmlString);
+    return xmlString;
+}
+
 @interface AFHTTPClient ()
 @property (readwrite, nonatomic, retain) NSURL *baseURL;
 @property (readwrite, nonatomic, retain) NSMutableArray *registeredHTTPOperationClassNames;
@@ -252,6 +265,10 @@ static NSString * AFPropertyListStringFromParameters(NSDictionary *parameters) {
                 case AFPropertyListParameterEncoding:;
                     [request setValue:[NSString stringWithFormat:@"application/x-plist; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
                     [request setHTTPBody:[AFPropertyListStringFromParameters(parameters) dataUsingEncoding:self.stringEncoding]];
+                    break;
+                case AFXMLParameterEncoding:;
+                    [request setValue:[NSString stringWithFormat:@"application/xhtml+xml; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+                    [request setHTTPBody:[AFXMLStringFromParameters(parameters) dataUsingEncoding:self.stringEncoding]];
                     break;
             }
         }
