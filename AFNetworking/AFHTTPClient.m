@@ -267,8 +267,9 @@ static NSString *AFXMLStringFromParameters(NSDictionary *parameters) {
                     [request setHTTPBody:[AFPropertyListStringFromParameters(parameters) dataUsingEncoding:self.stringEncoding]];
                     break;
                 case AFXMLParameterEncoding:;
-                    [request setValue:[NSString stringWithFormat:@"application/xhtml+xml; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
-                    [request setHTTPBody:[AFXMLStringFromParameters(parameters) dataUsingEncoding:self.stringEncoding]];
+                    [request setValue:[NSString stringWithFormat:@"application/xml; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+                    [request setHTTPBody:[[parameters objectForKey:@"HTTPBody"] dataUsingEncoding:self.stringEncoding]];
+					MALog(@"HTTPBody: %@", [[parameters objectForKey:@"HTTPBody"] dataUsingEncoding:self.stringEncoding]);
                     break;
             }
         }
